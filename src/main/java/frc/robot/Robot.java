@@ -8,6 +8,19 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+//added gb
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.util.sendable.SendableRegistry;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+
+import com.revrobotics.PersistMode;
+import com.revrobotics.ResetMode;
+import com.revrobotics.spark.*;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
+
+
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
  * the TimedRobot documentation. If you change the name of this class or the package after creating
@@ -19,6 +32,14 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
+
+  //gb added
+  private final XboxController controller = new XboxController(0);
+    private final SparkMax leftMotor = new SparkMax(1, MotorType.kBrushless);
+    private final SparkMax rightMotor = new SparkMax(2, MotorType.kBrushless);
+    private final DifferentialDrive robotDrive =
+            new DifferentialDrive(leftMotor::set, rightMotor::set);
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -27,6 +48,36 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+
+    //gb add        
+    SendableRegistry.addChild(robotDrive, leftMotor);
+    SendableRegistry.addChild(robotDrive, rightMotor);
+
+
+    SparkMaxConfig LeftSparkConfig = new SparkMaxConfig();
+    LeftSparkConfig
+        .smartCurrentLimit(50)
+        .idleMode(IdleMode.kBrake);
+    // Persist parameters to retain configuration in the event of a power cycle
+    leftMotor.configure(LeftSparkConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    
+    SparkMaxConfig RightSparkConfig = new SparkMaxConfig();
+    RightSparkConfig
+        .smartCurrentLimit(50)
+        .idleMode(IdleMode.kBrake)
+        .inverted(true); // Invert right motor
+      // Persist parameters to retain configuration in the event of a power cycle   
+    rightMotor.configure(RightSparkConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+
+   
+             // We need to invert one side of the drivetrain so that positive voltages
+        // result in both sides moving forward. Depending on how your robot's
+        // gearbox is constructed, you might have to invert the left side instead.
+////rightMotor.configure(invertSparkConfig, null, null);
+//results in error below
+        //The method configure(SparkBaseConfig, SparkBase.ResetMode, SparkBase.PersistMode) is ambiguous for the type SparkMax
+
   }
 
   /**
@@ -76,7 +127,15 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+
+        // Drive with arcade drive.
+        // That means that the Y axis drives forward
+        // and backward, and the X turns left and right.
+        System.out.println("==========I am moving!==========");
+        robotDrive.arcadeDrive(controller.getLeftY(), controller.getRightX());
+
+  }
 
   /** This function is called once when the robot is disabled. */
   @Override
