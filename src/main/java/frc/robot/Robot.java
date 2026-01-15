@@ -109,6 +109,7 @@ public class Robot extends TimedRobot {
     System.out.println("Auto selected: " + m_autoSelected);
     //gb added reset timer1 to zero
     timer1.restart();
+    //git demo comment
 
   }
 
@@ -119,14 +120,14 @@ public class Robot extends TimedRobot {
       case kCenterForward:
         // drive forward
         //stop after 2 seconds
-if(timer1.get() < 2) {
-  robotDrive.tankDrive(0.5,0.5); //drive forward at half speed
-} 
-else if(timer1.get() < 4) { //spin for 2 seconds
-  robotDrive.tankDrive(0.5,0); 
-} else {  //stop
-  robotDrive.tankDrive(0.0,0.0); 
-}
+        if(timer1.get() < 2) {
+          robotDrive.tankDrive(0.5,0.5); //drive forward at half speed
+        } 
+        else if(timer1.get() < 4) { //spin for 2 seconds
+          robotDrive.tankDrive(0.5,0); 
+        } else {  //stop
+          robotDrive.tankDrive(0.0,0.0); 
+        }
 
 
         break;
