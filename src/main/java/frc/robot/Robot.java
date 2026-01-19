@@ -23,10 +23,7 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 
 
-
-//change 1 git
-
-/**
+/*
  * The methods in this class are called automatically corresponding to each mode, as described in
  * the TimedRobot documentation. If you change the name of this class or the package after creating
  * this project, you must also update the Main.java file in the project.
@@ -39,7 +36,7 @@ public class Robot extends TimedRobot {
 
 
   //gb added
-    private final XboxController controller = new XboxController(0);
+    private final XboxController controller0 = new XboxController(0);
     private final SparkMax leftMotor = new SparkMax(1, MotorType.kBrushless);
     private final SparkMax rightMotor = new SparkMax(2, MotorType.kBrushless);
 
@@ -47,6 +44,11 @@ public class Robot extends TimedRobot {
     private final SparkMaxConfig driveConfig = new SparkMaxConfig();
 
     private final Timer timer1 = new Timer();
+    //used in teleop to control drive speed... slow it down so not so jumpy
+    private double driveSpeed = 1;
+
+   
+
 
 
     //private final DifferentialDrive robotDrive =
@@ -67,6 +69,7 @@ public class Robot extends TimedRobot {
     // Configure Spark Max motor controllers 
     driveConfig.smartCurrentLimit(60);
     driveConfig.voltageCompensation(12.0);
+    
 
     // Apply configuration to left motor
     leftMotor.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -157,11 +160,30 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-        // Drive with arcade drive.
-        // That means that the Y axis drives forward
-        // and backward, and the X turns left and right.
-        System.out.println("==========I am moving!==========");
-        robotDrive.arcadeDrive(controller.getLeftY(), controller.getRightX());
+         System.out.println("==========I am moving!==========");
+
+if (controller0.getLeftBumperPressed()) {
+  driveSpeed = 2; //divide by 2 to get 50% speed
+
+}
+if (controller0.getRightBumperPressed()) {
+  driveSpeed = driveSpeed - 0.1;  //increase speed by 10%
+  if (driveSpeed > 1) {
+    driveSpeed = 1;
+  }
+  System.out.println("Drive Speed Set to: " + driveSpeed);
+}   
+         // Drive with tank drive.
+       
+        // read controller joystick value range -1.0 to +1.0 note flip the sign as joystick values are reversed
+        // robotDrive.tankDrive(-controller0.getLeftY()/driveSpeed, -controller0.getRightY()/driveSpeed);
+
+        //arcade drive 
+        // That means that the Y axis drives forward the left stick
+        // and backward, and the X turns left and right the right stick
+        robotDrive.arcadeDrive(-controller0.getLeftY()/driveSpeed, -controller0.getRightX()/driveSpeed);
+
+
 
   }
 
