@@ -136,6 +136,25 @@ public class Robot extends TimedRobot {
         break;
       case kDefaultAuto:
       default:
+
+if(timer1.get() < 2) {
+          robotDrive.tankDrive(0.2,0.0); //drive forward at half speed
+        } 
+        else if(timer1.get() < 5) { //spin for 2 seconds
+          robotDrive.tankDrive(0.2,0); 
+        }
+        else if(timer1.get() < 7) {
+          robotDrive.tankDrive(0.5,0); 
+        }
+        else if(timer1.get() < 9) {
+          robotDrive.tankDrive(0.5,0);
+
+        } else {  //stop
+          robotDrive.tankDrive(0.0,0.0); 
+        }
+
+
+
         // Put default auto code here
         //GB added
         /* better code below *
