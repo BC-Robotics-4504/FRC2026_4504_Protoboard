@@ -54,6 +54,7 @@ public class Robot extends TimedRobot {
   public Robot() {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    SmartDashboard.putData(controller0);
 
     // Configure Spark Max motor controllers.
     intakeConfig.smartCurrentLimit(60);
@@ -76,7 +77,10 @@ public class Robot extends TimedRobot {
    * SmartDashboard integrated updating.
    */
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+    // Show the current status of the intake
+    SmartDashboard.putString("Intake status", intakeStatus.toString());
+  }
 
   /**
    * This autonomous (along with the chooser code above) shows how to select between different
