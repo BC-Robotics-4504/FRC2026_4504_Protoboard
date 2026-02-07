@@ -121,7 +121,6 @@ public class Robot extends TimedRobot {
         leftMotor.set(ejectSpeed);
         break;
       case STOP:
-      default:
         leftMotor.set(0.0);
         break;
     }
@@ -171,10 +170,10 @@ public class Robot extends TimedRobot {
       intakeStatus = IntakeStatus.STOP
     }
   }
-}
 
-enum IntakeStatus {
-  INTAKE,
-  EJECT,
-  STOP,
+  private enum IntakeStatus {
+    INTAKE,
+    EJECT,
+    STOP,
+  }
 }
