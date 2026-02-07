@@ -19,6 +19,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+// import com.revrobotics.spark.SparkAbsoluteEncoder;
 
 
 /*
@@ -37,13 +38,15 @@ public class Robot extends TimedRobot {
   // Initialize motors
   private final SparkMax leftMotor = new SparkMax(1, MotorType.kBrushless);
   private final SparkMax rightMotor = new SparkMax(2, MotorType.kBrushless);
+  // Initiailize encoders
+  // private final SparkAbsoluteEncoder leftEncoder = leftMotor.getAbsoluteEncoder();
   // Initialize motor config
   private final SparkMaxConfig intakeConfig = new SparkMaxConfig();
 
   private final Timer timer1 = new Timer();
 
   // Intake Parameters, in a CommandRobot structure would probably be put in Constants.java
-  private double intakeSpeed = 0.75;
+  private double intakeSpeed = 0.75; // Ideal value for launching (for launcher not intake) is 0.57
   private double ejectSpeed = -0.25; // This number should be negative
   private IntakeStatus intakeStatus = IntakeStatus.STOP;
 
@@ -80,6 +83,9 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     // Show the current status of the intake
     SmartDashboard.putString("Intake status", intakeStatus.toString());
+    // Gets and shows the left motor's rotation (hypothetically)
+    // double leftMotorRotation = leftEncoder.getPosition() * 360;
+    // SmartDashboard.putNumber("Left motor rotation", leftMotorRotation);
   }
 
   /**
