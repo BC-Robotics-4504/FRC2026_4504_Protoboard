@@ -42,6 +42,11 @@ public class Robot extends TimedRobot {
 
   private final Timer timer1 = new Timer();
 
+  // Intake Parameters, in a CommandRobot structure would probably be put in Constants.java
+  private double intakeSpeed = 0.75;
+  private double ejectSpeed = -0.25; // This number should be negative
+  private IntakeStatus intakeStatus = IntakeStatus.STOP;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -61,7 +66,6 @@ public class Robot extends TimedRobot {
 
     // Start timer
     timer1.start();
-  
   }
 
   /**
@@ -109,12 +113,19 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    if (controller0.getLeftBumperPressed()) {}
-
-    if (controller0.getRightBumperPressed()) {}   
-       
-    // read controller joystick value range -1.0 to +1.0 note flip the sign as joystick values are reversed
-    // robotDrive.tankDrive(-controller0.getLeftY()/driveSpeed, -controller0.getRightY()/driveSpeed);
+    switch (intakeStatus) {
+      case INTAKE:
+        leftMotor.set(intakeSpeed);
+        break;
+      case EJECT:
+        leftMotor.set(ejectSpeed);
+        break;
+      case STOP:
+      default:
+        leftMotor.set(0.0);
+        break;
+    }
+    updateIntakeStatus();
   }
 
   /** This function is called once when the robot is disabled. */
@@ -140,4 +151,30 @@ public class Robot extends TimedRobot {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {}
+
+  /** Updates the intake status based on driver input. */
+  private void updateIntakeStatus() {
+    if (controller0.getAButton() && controller0.getRightBumper()) {
+      // Keep the status the same.
+      return;
+    }
+
+    else if (controller0.getAButton()) {
+      intakeStatus = IntakeStatus.INTAKE;
+    }
+
+    else if (controller0.getRightBumper()) {
+      intakeStatus = IntakeStatus.EJECT;
+    }
+
+    else {
+      intakeStatus = IntakeStatus.STOP
+    }
+  }
+}
+
+enum IntakeStatus {
+  INTAKE,
+  EJECT,
+  STOP,
 }
