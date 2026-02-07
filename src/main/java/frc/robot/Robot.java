@@ -167,7 +167,7 @@ public class Robot extends TimedRobot {
     }
 
     else {
-      intakeStatus = IntakeStatus.STOP
+      intakeStatus = IntakeStatus.STOP;
     }
   }
 
