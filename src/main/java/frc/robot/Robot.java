@@ -125,6 +125,7 @@ public class Robot extends TimedRobot {
         leftMotor.set(ejectSpeed);
         break;
       case STOP:
+      default:
         leftMotor.set(0.0);
         break;
     }
