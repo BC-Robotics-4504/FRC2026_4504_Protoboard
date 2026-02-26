@@ -46,7 +46,7 @@ public class Robot extends TimedRobot {
   private final Timer timer1 = new Timer();
 
   // Intake Parameters, in a CommandRobot structure would probably be put in Constants.java
-  private double intakeSpeed = 0.75; // Ideal value for launching (for launcher not intake) is 0.57
+  private double intakeSpeed = 0.57; // Ideal value for launching (for launcher not intake) is 0.57
   private double ejectSpeed = -0.25; // This number should be negative
   private IntakeStatus intakeStatus = IntakeStatus.STOP;
 
